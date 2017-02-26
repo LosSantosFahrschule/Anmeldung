@@ -1,0 +1,66 @@
+<!--
+
+<form method="post" action="forum/ucp.php?mode=login">
+<label for="username">Username: </label> <input type="text" name="username" id="username" size="40" /><br /><br />
+ <label for="password">Password: </label><input type="password" name="password" id="password" size="40" /><br /><br />
+ <label for="autologin">Remember Me?: </label><input type="checkbox" name="autologin" id="autologin"  /><br /><br />
+ <input type="submit" value="Log In" name="login" />
+ <input type="hidden" name="redirect" value="../index.php" />
+ </form>
+
+ 
+ require_once('global.php');
+$username = 'example'; // or email
+$password = 'example';
+try {
+	$user = wcf\system\user\authentication\UserAuthenticationFactory::getInstance()->getUserAuthentication()->loginManually($username, $password);
+}
+catch (Exception $e) {
+	if ($e->getField() == 'username') {
+		try {
+			$user = wcf\system\user\authentication\EmailUserAuthentication::getInstance()->loginManually($username, $password);
+		}
+		catch (Exception $e2) {
+			echo "Username falsch";
+			die();
+		}
+	}
+	else {
+		echo "Passwort falsch";
+		die();
+	}
+}
+\wcf\system\WCF::getSession()->changeUser($user);
+echo "alles gut"; 
+ 
+-->
+<html>
+<body>
+<div id="results">
+</div>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"/>
+<script type="text/javascript">
+/*$.ajax({
+  url: "https://www.gvmp.de/forum/login",
+  cache: false,
+  success: function(html){
+    $("#results").append(html);
+	console.log(html);
+  },
+  error: function (e) {
+	alert("Error: " + e);
+	console.log("Error: " + e);
+  }
+});*/
+
+$.get(
+    'http://www.corsproxy.com/' +
+    'en.wikipedia.org/wiki/Cross-origin_resource_sharing',
+    function (response) {
+        console.log("> ", response);
+        $("#results").html(response);
+});
+
+</script>
+</body>
+</html>
