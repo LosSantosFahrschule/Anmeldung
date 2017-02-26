@@ -39,27 +39,85 @@ echo "alles gut";
 <div id="results">
 </div>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="js/remote.js"></script>
 <script type="text/javascript">
 /*$.ajax({
   url: "https://www.gvmp.de/forum/login",
   cache: false,
+  crossDomain: true,
+  dataType: 'jsonp',
+  jsonp: false,
+  //jsonpCallback: false,
+  jsonp : false,
+    jsonpCallback: 'jsonCallback',
   success: function(html){
-    $("#results").append(html);
+    //$("#results").append(html);
 	console.log(html);
+	//alert(this.headers);
   },
-  error: function (e) {
-	alert("Error: " + e);
-	console.log("Error: " + e);
+  error: function (html) {
+	console.log(html);
+	//alert(this.headers);
   }
 });*/
 
-$.get(
-    'http://www.corsproxy.com/' +
-    'en.wikipedia.org/wiki/Cross-origin_resource_sharing',
-    function (response) {
-        console.log("> ", response);
-        $("#results").html(response);
+$.asyncForm(
+     {
+        action: 'https://www.gvmp.de/',
+        params: {
+            param1 : "bla",
+            param2 : "bla"
+        },
+
+        method:'get',
+
+        onLoadFinished: function(response) {
+            console.log(response);
+        }
+
 });
+
+$.ajaxSetup({
+    scriptCharset: "utf-8", //or "ISO-8859-1"
+    contentType: "application/json; charset=utf-8"
+});
+
+$.getJSON('http://whateverorigin.org/get?url=' + 
+    encodeURIComponent('https://www.gvmp.de/forum/login') + '&callback=?',
+    function (data) {
+        console.log("> ", data);
+
+        //If the expected response is text/plain
+        //$("#results").html(data.contents);
+		
+		var elements = $(data.contents);
+		
+		console.log($('#loginForm > div.formSubmit > input[type="hidden"]:nth-child(3)', elements));
+		
+		//var doc = new DOMParser().parseFromString(data.contents,'text/xml');
+		//var result = doc.evaluate('//*[@id="loginForm"]/div[2]/input[3]', doc, null, XPathResult.ANY_TYPE, null);
+		//console.log(result); // returns 'test'
+
+        //If the expected response is JSON
+        //var response = $.parseJSON(data.contents);
+});
+
+/*function jsonp(url, callback) {
+    var callbackName = 'jsonp_callback_' + Math.round(100000 * Math.random());
+    window[callbackName] = function(data) {
+        delete window[callbackName];
+        document.body.removeChild(script);
+        callback(data);
+    };
+
+    var script = document.createElement('script');
+    script.src = url;
+    document.body.appendChild(script);
+}
+
+jsonp('https://www.gvmp.de/forum/login', function(data) {
+   //alert(data);
+});*/
 
 </script>
 </body>
