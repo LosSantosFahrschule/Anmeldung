@@ -82,7 +82,7 @@ $.ajaxSetup({
     contentType: "application/json; charset=utf-8"
 });
 
-$.getJSON('http://whateverorigin.org/get?url=' + 
+$.getJSON('https://whateverorigin.org/get?url=' + 
     encodeURIComponent('https://www.gvmp.de/forum/login') + '&callback=?',
     function (data) {
         console.log("> ", data);
